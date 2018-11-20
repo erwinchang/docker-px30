@@ -2,6 +2,9 @@ FROM ubuntu:xenial-20181005
 
 MAINTAINER Erwin "m9207216@gmail.com"
 
+# for kernel/scripts/mkkrnlimg 32bit
+RUN dpkg --add-architecture i386
+
 # https://github.com/sameersbn/docker-gitlab/blob/master/Dockerfile
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
@@ -18,15 +21,19 @@ RUN apt-get update \
     libglade2-dev cvs git mercurial rsync openssh-client subversion asciidoc w3m dblatex \
     graphviz python-matplotlib \
 #
- && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y locales \
+ && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y locales libssl-dev \
+# kernel tools
+ && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y liblz4-tool \
+# for kernel/scripts/mkkrnlimg 32bit
+ && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y libc6:i386 libncurses5:i386 libstdc++6:i386 \
  && locale-gen en_US.UTF-8 \
- && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales libssl-dev \
+ && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales \
  && rm -rf /var/lib/apt/lists/*
 
-#RUN groupadd -g 1000 -r aosp
-#RUN useradd -u 1000 --create-home -r -g aosp aosp
-#USER aosp
-#RUN git config --global user.email "aosp@example.com"
-#RUN git config --global user.name "aosp"
-#ENV LANG en_US.UTF-8
+RUN groupadd -g 1000 -r aosp
+RUN useradd -u 1000 --create-home -r -g aosp aosp
+USER aosp
+RUN git config --global user.email "aosp@example.com"
+RUN git config --global user.name "aosp"
+ENV LANG en_US.UTF-8
 RUN [ "/bin/bash" ]
