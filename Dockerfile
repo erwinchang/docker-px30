@@ -21,7 +21,7 @@ RUN apt-get update \
     libglade2-dev cvs git mercurial rsync openssh-client subversion asciidoc w3m dblatex \
     graphviz python-matplotlib \
 #
- && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y locales libssl-dev \
+ && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y locales libssl-dev libncurses-dev \
 # kernel tools
  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y liblz4-tool \
 # for kernel/scripts/mkkrnlimg 32bit
